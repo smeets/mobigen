@@ -70,7 +70,7 @@ func main() {
 		}
 
 		title := "Chapter " + strconv.Itoa(i+1) + ": " + blob.Chapter.Title
-		content := regexp.MustCompile("[\r\n]").ReplaceAllString(blob.Chapter.Content, "<br>")
+		content := regexp.MustCompile("[\r\n]+").ReplaceAllString(blob.Chapter.Content, "<br>")
 		kindle.NewChapter(title, []byte(content))
 	}
 
