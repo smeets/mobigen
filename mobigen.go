@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/766b/mobi"
 	"regexp"
+	"strings"
 	"strconv"
 	"encoding/json"
 	"flag"
@@ -65,7 +66,8 @@ func main() {
 		}
 
 		title := "Chapter " + strconv.Itoa(i+1) + ": " + blob.Chapter.Title
-		content := regexp.MustCompile("[\r\n]+").ReplaceAllString(blob.Chapter.Content, "<br><br>")
+		rows := regexp.MustCompile("[\r\n]+").Split(blob.Chapter.Content, -1)
+		content := "<p>" + strings.Join(rows[:], "</p><p>") + "</p>"
 		kindle.NewChapter(title, []byte(content))
 	}
 
