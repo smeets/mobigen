@@ -44,11 +44,11 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	chapterSpan := " (" + strconv.Itoa(1+*start) + "-" + strconv.Itoa(*end) + ")"
 	kindle.Compression(mobi.CompressionNone)
 	kindle.NewExthRecord(mobi.EXTH_DOCTYPE, "EBOK")
 	kindle.NewExthRecord(mobi.EXTH_AUTHOR, config.Author)
-	kindle.NewExthRecord(mobi.EXTH_TITLE, config.Title)
-	chapterSpan := " (" + strconv.Itoa(1+*start) + "-" + strconv.Itoa(*end) + ")"
+	kindle.NewExthRecord(mobi.EXTH_TITLE, config.Title + chapterSpan)
 	kindle.Title(config.Title + chapterSpan)
 
 	for i := *start; i < *end; i++ {
