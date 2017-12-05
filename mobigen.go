@@ -14,6 +14,7 @@ import (
 )
 
 var projectPath = flag.String("path", "~/", "base path to root")
+var folderName = flag.String("folder", "raw", "relative path to chapter folder")
 var outName = flag.String("out", "book.mobi", "output filename")
 var start = flag.Int("start", 0, "start chapter id")
 var end = flag.Int("end", -1, "end chapter id")
@@ -22,7 +23,7 @@ func main() {
 	flag.Parse()
 
 	configPath := path.Join(*projectPath, "project.json")
-	rawsPath := path.Join(*projectPath, "raw/")
+	rawsPath := path.Join(*projectPath, *folderName)
 	fmt.Printf("%s %s %d %d\n", *projectPath, configPath, *start, *end)
 
 	configData, err := ioutil.ReadFile(configPath)
@@ -65,7 +66,10 @@ func main() {
 			log.Fatalln("error:", err)
 		}
 
-		title := "Chapter " + strconv.Itoa(i+1) + ": " + blob.Chapter.Title
+		title := blob.Chapter.Title
+		if !strings.Contains(title, "Chapter") {
+			title = "Chapter " + strconv.Itoa(i+1) + " – " + title
+		}
 		rows := regexp.MustCompile("[\r\n]+").Split(blob.Chapter.Content, -1)
 		content := "<p>" + strings.Join(rows[:], "</p><p>") + "</p>"
 		kindle.NewChapter(title, []byte(content))
